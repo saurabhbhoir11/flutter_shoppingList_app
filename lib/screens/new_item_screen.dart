@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app/data/categories.dart';
 import 'package:shopping_list_app/models/category.dart';
+import 'package:shopping_list_app/models/grocery_item.dart';
 
 class NewItemScreen extends StatefulWidget {
   const NewItemScreen({super.key});
@@ -22,6 +23,16 @@ class NewItemScreenState extends State<NewItemScreen> {
     _formKey.currentState!.validate();
     _formKey.currentState!.save();
     print(_enteredName);
+    print(_enteredQuantity);
+    print(_selectedCategory);
+    Navigator.of(context).pop(
+      GroceryItem(
+        name: _enteredName,
+        id: DateTime.now().toString(),
+        quantity: _enteredQuantity,
+        category: _selectedCategory,
+      ),
+    );
   }
 
   @override
@@ -81,6 +92,7 @@ class NewItemScreenState extends State<NewItemScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: DropdownButtonFormField(
+                        value: _selectedCategory,
                         items: [
                           for (final category in categories.entries)
                             DropdownMenuItem(
@@ -99,8 +111,10 @@ class NewItemScreenState extends State<NewItemScreen> {
                             ),
                         ],
                         onChanged: (value) {
-                          _selectedCategory =
-                              value ?? categories[Categories.vegetables]!;
+                          setState(() {
+                            _selectedCategory =
+                                value ?? categories[Categories.vegetables]!;
+                          });
                         },
                       ),
                     ),
